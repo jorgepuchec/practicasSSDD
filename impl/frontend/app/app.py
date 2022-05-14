@@ -55,17 +55,17 @@ def login():
         
 @app.route("/signup", methods=['GET','POST'])
 def signup():
-if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    else:
-        error = None
-        form = SignUpForm(request.form)
-        if request.method == "POST" and  form.validate():
-        	user = User(1, form.name.data.encode('utf-8'), form.email.data.encode('utf-8'),
- 	               form.password.data.encode('utf-8'))
-                users.append(user)
-                login_user(user, False)
-                return redirect(url_for('index'))
+#if current_user.is_authenticated:
+#        return redirect(url_for('index'))
+ #   else:
+  #      error = None
+   #     form = SignUpForm(request.form)
+    #    if request.method == "POST" and  form.validate():
+     #   	user = User(1, form.name.data.encode('utf-8'), form.email.data.encode('utf-8'),
+ 	#               form.password.data.encode('utf-8'))
+         #       users.append(user)
+          #      login_user(user, False)
+           #     return redirect(url_for('index'))
         return render_template('signup.html', form=form,  error=error)
 
 @app.route('/send_video', methods=['GET', 'POST'])

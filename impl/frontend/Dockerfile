@@ -1,12 +1,18 @@
-FROM python:3.7-slim
+FROM ubuntu:20.04
 
 MAINTAINER Your Name "youremail@domain.tld"
 
-COPY . /videofaces-frontend
+RUN apt-get update -y && \
+    apt-get install -y python3 python3-pip
 
 WORKDIR /videofaces-frontend
 
-RUN pip3 install -r requirements.txt
+# We copy just the requirements.txt first to leverage Docker cache
+COPY ./requirements.txt /videofaces-frontend/requirements.txt
+
+RUN pip install -r requirements.txt
+
+COPY . /videofaces-frontend
 
 ENV FLASK_APP="app/app.py"
 ENV FLASK_ENV="development"

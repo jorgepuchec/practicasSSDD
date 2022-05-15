@@ -7,7 +7,7 @@ import os
 from models import users, User
 
 # Login
-from forms import LoginForm
+from forms import LoginForm, SignupForm, SendVideoForm
 
 # Send Video
 from forms import SendVideoForm
@@ -53,27 +53,39 @@ def login():
 
         return render_template('login.html', form=form,  error=error)
         
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    else:
+        error = None
+        form = SignupForm(request.form)
+        if request.method == "POST" and form.validate():
+            user = User(1, form.name.data.encode('utf-8'), form.email.data.encode('utf-8'),
+                            form.password.data.encode('utf-8'))
+            users.append(user)
+            login_user(user, False)
+            return redirect(url_for('index'))
+        return render_template('signup.html', form=form,  error=error)
+        
 
 @app.route('/send_video', methods=['GET', 'POST'])
 @login_required
-	def send_video():
-	    error = None
-	    form = SendVideoForm()
-	    if request.method == "POST" and form.validate():
-		# A video is being sent
-		files = {'file': (form.file.data.filename, # filename
-		                  form.file.data)} # file stream to resend
-		# print(requests.Request('POST', 'http://localhost:8080/rest/uploadVideo',
-		#                        files=files).prepare().body.decode('utf-8'))
-		REST_SERVER = os.environ.get('REST_SERVER', 'localhost')
-		response = requests.post('http://'+REST_SERVER+':8080/Service/uploadVideo',
-		                         files=files)
-		if response.status_code == 200:
-		    error = "Video uploaded successfully"
-		else:
-		    error = response.text
-
-	    return render_template('send_video.html', form=form, error=error)
+def send_video():
+    error = None
+    form = SendVideoForm()
+    if request.method == "POST" and form.validate():
+        # A video is being sent
+        files = {'file': (form.file.data.filename, form.file.data)} # file stream to resend
+        # print(requests.Request('POST', 'http://localhost:8080/rest/uploadVideo',
+        #                        files=files).prepare().body.decode('utf-8'))
+        REST_SERVER = os.environ.get('REST_SERVER', 'localhost')
+        response = requests.post('http://'+REST_SERVER+':8080/Service/uploadVideo', files=files)
+    if response.status_code == 200:
+        error = "Video uploaded successfully"
+    else:
+        error = response.text
+    return render_template('send_video.html', form=form, error=error)
 
 
 @app.route('/profile')

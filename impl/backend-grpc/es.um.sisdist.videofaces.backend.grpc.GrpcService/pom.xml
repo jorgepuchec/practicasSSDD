@@ -3,10 +3,6 @@
 	<groupId>es.um.sisdist.videofaces.backend.grpc</groupId>
 	<artifactId>GrpcService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<properties>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.grpc</groupId>
@@ -47,9 +43,6 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.0</version>
-				<configuration>
-					<release>11</release>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.xolstice.maven.plugins</groupId>

@@ -84,10 +84,10 @@ def send_video():
         #                        files=files).prepare().body.decode('utf-8'))
         REST_SERVER = os.environ.get('REST_SERVER', 'localhost')
         response = requests.post('http://'+REST_SERVER+':8080/Service/uploadVideo', files=files)
-    if response.status_code == 200:
-        error = "Video uploaded successfully"
-    else:
-        error = response.text
+        if response.status_code == 200:
+            error = "Video uploaded successfully"
+        else:
+            error = response.text
     return render_template('send_video.html', form=form, error=error)
 
 

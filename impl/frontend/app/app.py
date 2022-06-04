@@ -1,6 +1,7 @@
 from flask import Flask, render_template, send_from_directory, url_for, request, redirect
 from flask_login import LoginManager, login_manager, current_user, login_user, login_required, logout_user
 import requests
+import json
 import os
 
 # Usuarios
@@ -61,9 +62,13 @@ def signup():
         error = None
         form = SignupForm(request.form)
         if request.method == "POST":
-            user = {email:form.email.data.encode('utf-8'), password: form.password.data.encode('utf-8'), name: form.name.data.encode('utf-8')}
+            user = {"email":form.email.data, "password": form.password.data, "name": form.name.data}
             header = {"Content-Type": "application/json"}
-            reponse = requests.post("https://{os.environ['BACKEND_REST']}:8080/users", data=json.dumps(user), headers=header)
+            BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
+            #
+            #Falla url
+            #
+            reponse = requests.post('http://'+BACKEND_REST+':8080/users', data=json.dumps(user), headers=header)
             
             if response.status_code != 200:
                 error='Invalid User. Please, try again'

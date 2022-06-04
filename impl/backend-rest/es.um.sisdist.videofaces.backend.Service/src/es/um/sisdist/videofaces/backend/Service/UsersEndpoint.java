@@ -14,6 +14,32 @@ public class UsersEndpoint
 {
     private AppLogicImpl impl = AppLogicImpl.getInstance();
 
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response signIn(UserDTO user)
+    {
+        if(user.getEmail()==""|| user.getName()==""){
+
+            return Response.status(Status.FORBIDDEN).build();
+
+        } else{
+
+            UserDTO u = UserDTOUtils.toDTO(impl.registerUser(user).orElse(null));
+
+            if(u != null){
+
+                return Response.ok(u).build();
+
+            } else {
+
+                return Response.status(Status.FORBIDDEN).build();
+                
+            }
+        }
+    }
+
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)

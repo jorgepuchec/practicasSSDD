@@ -96,4 +96,21 @@ public class AppLogicImpl
 
         return Optional.empty();
     }
+
+    public UserDTO registerUser(UserDTO udto){
+
+        Optional<User> u = dao.getUserByEmail(udto.getEmail());
+        if (u.isPresent()){
+
+            return Optional.empty();
+
+        } else {
+
+        	String token = user.getName()+user.getEmail();
+
+            User newUser = new User(user.getEmail(), User.md5pass(user.getPassword()), user.getName(), User.md5pass(token),0,0 );
+            return dao.newUser(newUser);
+
+        }
+    }
 }

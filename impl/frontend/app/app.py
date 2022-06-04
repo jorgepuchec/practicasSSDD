@@ -60,13 +60,16 @@ def signup():
     else:
         error = None
         form = SignupForm(request.form)
-        if request.method == "POST" and form.validate():
-            user = User(1, form.name.data.encode('utf-8'), form.email.data.encode('utf-8'),
-                            form.password.data.encode('utf-8'))
-            users.append(user)
-            login_user(user, False)
-            return redirect(url_for('index'))
-        return render_template('signup.html', form=form,  error=error)
+        if request.method == "POST":
+            user = {email:form.email.data.encode('utf-8'), password: form.password.data.encode('utf-8'), name: form.name.data.encode('utf-8')}
+            header = {"Content-Type": "application/json"}
+            reponse = requests.post("https://{os.environ['BACKEND_REST']}:8080/users", data=json.dumps(user), headers=header)
+            
+            if response.status_code != 200:
+                error='Invalid User. Please, try again'
+            else:    
+                return redirect(url_for('index'))
+    return render_template('signup.html', form=form,  error=error)
         
 
 @app.route('/send_video', methods=['GET', 'POST'])

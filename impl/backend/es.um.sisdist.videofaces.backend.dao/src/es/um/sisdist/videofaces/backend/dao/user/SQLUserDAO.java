@@ -82,5 +82,21 @@ public class SQLUserDAO implements IUserDAO
             return Optional.empty();
         }
     }
+    
+    public Optional<User> saveUser(User u)
+    {
+        PreparedStatement stm;
+        try
+        {
+            stm = conn.prepareStatement("INSERT INTO users VALUES("+ u.getEmail() +","+u.getPassword_hash()+","+u.getName()+","+u.getToken()+", 0);");
+            ResultSet result = stm.executeQuery();
+            if (result.next())
+                return createUser(result);
+        } catch (SQLException e)
+        {
+            // Fallthrough
+        }
+        return Optional.empty();
+    }
 
 }

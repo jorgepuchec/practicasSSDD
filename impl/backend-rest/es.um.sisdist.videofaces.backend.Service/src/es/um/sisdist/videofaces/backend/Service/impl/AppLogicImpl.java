@@ -4,8 +4,10 @@
 package es.um.sisdist.videofaces.backend.Service.impl;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+import java.util.logging.Logger;
+import es.um.sisdist.videofaces.models.UserDTO;
+import es.um.sisdist.videofaces.models.UserDTOUtils;
 import es.um.sisdist.videofaces.backend.dao.DAOFactoryImpl;
 import es.um.sisdist.videofaces.backend.dao.IDAOFactory;
 import es.um.sisdist.videofaces.backend.dao.models.User;
@@ -97,7 +99,7 @@ public class AppLogicImpl
         return Optional.empty();
     }
 
-    public UserDTO registerUser(UserDTO udto){
+    public Optional<User> registerUser(UserDTO udto){
 
         Optional<User> u = dao.getUserByEmail(udto.getEmail());
         if (u.isPresent()){
@@ -106,10 +108,10 @@ public class AppLogicImpl
 
         } else {
 
-        	String token = user.getName()+user.getEmail();
+        	String token = udto.getName()+udto.getEmail();
 
-            User newUser = new User(user.getEmail(), User.md5pass(user.getPassword()), user.getName(), User.md5pass(token),0,0 );
-            return dao.newUser(newUser);
+            User newUser = new User(udto.getEmail(), UserUtils.md5pass(udto.getPassword()), udto.getName(), UserUtils.md5pass(token), 0);
+            return dao.saveUser(newUser);
 
         }
     }

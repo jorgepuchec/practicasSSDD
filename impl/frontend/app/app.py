@@ -68,7 +68,7 @@ def signup():
             #
             #Falla url
             #
-            reponse = requests.post('http://'+BACKEND_REST+':8080/users', data=json.dumps(user), headers=header)
+            response = requests.post('http://'+BACKEND_REST+':8080/users', data=json.dumps(user), headers=header)
             
             if response.status_code != 200:
                 error='Invalid User. Please, try again'

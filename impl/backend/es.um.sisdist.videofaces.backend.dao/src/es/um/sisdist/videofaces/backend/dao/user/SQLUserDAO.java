@@ -21,7 +21,7 @@ public class SQLUserDAO implements IUserDAO
 {
     Connection conn;
     private int aux = 1;
-    private string id = Integer.parseInt(aux);
+    private String id = String.valueOf(aux);
 
     public SQLUserDAO()
     {
@@ -91,11 +91,19 @@ public class SQLUserDAO implements IUserDAO
         PreparedStatement stm;
         try
         {
-            stm = conn.prepareStatement("INSERT INTO users VALUES("+id+","+ u.getEmail() +","+u.getPassword_hash()+","+u.getName()+","+u.getToken()+", 0);");
+            stm = conn.prepareStatement("INSERT INTO users VALUES(?, ?, ?, ?, ?, ?)");
+            stm.setString(1, id);
+            stm.setString(2, u.getEmail());
+            stm.setString(3, u.getPassword_hash());
+            stm.setString(4, u.getName());
+            stm.setString(5, u.getToken());
+            stm.setInt(6, 0);
+
             aux += 1;
-            ResultSet result = stm.executeQuery();
-            if (result.next())
-                return createUser(result);
+            stm.executeUpdate();
+            conn.commit();
+
+            return getUserByEmail(u.getEmail());
         } catch (SQLException e)
         {
             // Fallthrough

@@ -1,8 +1,10 @@
 package es.um.sisdist.videofaces.backend.Service;
 
 import es.um.sisdist.videofaces.backend.Service.impl.AppLogicImpl;
+import java.util.Optional;
 
 import es.um.sisdist.videofaces.models.UserDTO;
+import es.um.sisdist.videofaces.backend.dao.models.User;
 import es.um.sisdist.videofaces.models.UserDTOUtils;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -31,8 +33,7 @@ public class UsersEndpoint
 
         } else{
 
-            //UserDTO u = UserDTOUtils.toDTO(impl.registerUser(user).orElse(null));
-            Optional<User> u = impl.registerUser(user).orElse(null);
+            UserDTO u = UserDTOUtils.toDTO(impl.registerUser(user).orElse(null));
 
             if(u != null){
 

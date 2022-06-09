@@ -70,7 +70,7 @@ def signup():
             response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users", data=json.dumps(user), headers={"Content-Type": "application/json"})
             #error = response.status_code
             if response.status_code != 200:
-                error=response.json()
+                error=response.text
             else:    
                 return redirect(url_for('index'))
         return render_template('signup.html', form=form,  error=error)

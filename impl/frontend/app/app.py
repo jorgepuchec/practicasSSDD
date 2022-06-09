@@ -44,27 +44,20 @@ def login():
         form = LoginForm(request.form)
         if request.method == "POST" and  form.validate():
             user = {"email": form.email.data, "password": form.password.data}
-            BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
-            response = requests.post('http://'+BACKEND_REST+':8080/checkLogin', data=json.dumps(user), headers={"Content-Type": "application/json"})
+            #BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
+            #print(form.email.data)
+            response = requests.post("http://"+os.environ['BACKEND_REST']+":8080/rest/checkLogin", data=user, headers={"Content-Type": "application/json"})
+            #print("HOLA HE PRINTEADO")
 
             if response.status_code != 200:
-                error: "Invalid Credentials. Please try again"
+                error = 'Invalid Credentials. Please try again'
             else:
                 campos = response.json()
-                print(campos)
-                userValidado = User(campos['id'], campos['name'], campos['email'], campos['password'], campos['token'], campos['visits'])
+                #print(campos)
+                userValidado = User(campos[u'id'], campos[u'name'], campos[u'email'], campos[u'password'], campos[u'token'], campos['visits'])
                 users.append()
                 login_user(userValidado, remember=form.remember_me.data)
                 return redirect(url_for('profile'))
-            #if form.email.data != 'admin@um.es' or form.password.data != 'admin':
-             #   error = 'Invalid Credentials. Please try again.'
-            #else:
-             #   user = User(1, 'admin', form.email.data.encode('utf-8'),
-              #              form.password.data.encode('utf-8'))
-               # users.append(user)
-                #login_user(user, remember=form.remember_me.data)
-               # return redirect(url_for('index'))
-
         return render_template('login.html', form=form,  error=error)
         
 @app.route('/signup', methods=['GET', 'POST'])

@@ -58,6 +58,7 @@ public class SQLUserDAO implements IUserDAO
             stm = conn.prepareStatement("SELECT * from users WHERE email = ?");
             stm.setString(1, id);
             ResultSet result = stm.executeQuery();
+            System.out.println(result.toString());
             if (result.next())
                 return createUser(result);
         } catch (SQLException e)

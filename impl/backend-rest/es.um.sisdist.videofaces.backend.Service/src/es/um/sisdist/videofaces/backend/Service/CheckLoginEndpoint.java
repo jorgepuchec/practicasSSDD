@@ -26,7 +26,7 @@ public class CheckLoginEndpoint
     @Produces(MediaType.APPLICATION_JSON)
     public Response checkUser(UserDTO uo)
     {
-        System.out.println(uo.getEmail()+" "+uo.getPassword());
+        //System.out.println(uo.getEmail()+" "+uo.getPassword());
         Optional<User> u = impl.checkLogin(uo.getEmail(), uo.getPassword());
         if (u.isPresent())
             return Response.ok(UserDTOUtils.toDTO(u.get())).build();

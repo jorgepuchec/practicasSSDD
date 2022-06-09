@@ -68,14 +68,15 @@ def signup():
     else:
         error = None
         form = SignupForm(request.form)
-        if request.method == "POST":
+        if request.method == "POST" and  form.validate():
             user = {"email":form.email.data, "password": form.password.data, "name": form.name.data}
-            header = {"Content-Type": "application/json"}
-            BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
-            response = requests.post('http://'+BACKEND_REST+':8080/users', data=json.dumps(user), headers=header)
+            #header = {"Content-Type": "application/json"}
+            #BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
+            response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users", data=json.dumps(user), headers={"Content-Type": "application/json"})
+            #error = response.status_code
             if response.status_code != 200:
-                #error='Invalid User. Please, try again'
-                error=response.text
+                error='Invalid User. Please, try again'
+                #error=response.text
             else:    
                 return redirect(url_for('index'))
         return render_template('signup.html', form=form,  error=error)

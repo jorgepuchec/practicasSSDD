@@ -25,7 +25,7 @@ public class UsersEndpoint
     @Produces(MediaType.APPLICATION_JSON)
     public Response signIn(UserDTO user)
     {
-        if(user.getEmail()==""|| user.getName()==""){
+        if(user.getEmail()==""|| user.getName()=="" || user.getPassword()==""){
 
             return Response.status(Status.FORBIDDEN).build();
 

@@ -31,7 +31,8 @@ public class UsersEndpoint
 
         } else{
 
-            UserDTO u = UserDTOUtils.toDTO(impl.registerUser(user).orElse(null));
+            //UserDTO u = UserDTOUtils.toDTO(impl.registerUser(user).orElse(null));
+            Optional<User> u = impl.registerUser(user).orElse(null);
 
             if(u != null){
 

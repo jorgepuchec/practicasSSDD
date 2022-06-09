@@ -44,14 +44,11 @@ def login():
         form = LoginForm(request.form)
         if request.method == "POST" and  form.validate():
             user = {"email": form.email.data, "password": form.password.data}
-            #BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
-            #print(form.email.data)
             response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/checkLogin", data=json.dumps(user), headers={"Content-Type": "application/json"})
-            #print("HOLA HE PRINTEADO")
+
 
             if response.status_code != 200:
                 error = 'Invalid Credentials. Please try again'
-                #error=response.json()
             else:
                 campos = response.json()
                 #print(campos)
@@ -68,15 +65,12 @@ def signup():
     else:
         error = None
         form = SignupForm(request.form)
-        if request.method == "POST" and  form.validate():
+        if request.method == "POST":
             user = {"email":form.email.data, "password": form.password.data, "name": form.name.data}
-            #header = {"Content-Type": "application/json"}
-            #BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
             response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users", data=json.dumps(user), headers={"Content-Type": "application/json"})
             #error = response.status_code
             if response.status_code != 200:
-                error='Invalid User. Please, try again'
-                #error=response.text
+                error=response.json()
             else:    
                 return redirect(url_for('index'))
         return render_template('signup.html', form=form,  error=error)

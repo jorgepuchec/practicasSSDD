@@ -33,6 +33,9 @@
 
             <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
         </form>
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

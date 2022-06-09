@@ -20,6 +20,8 @@ import es.um.sisdist.videofaces.backend.dao.models.User;
 public class SQLUserDAO implements IUserDAO
 {
     Connection conn;
+    private int aux = 1;
+    private string id = Integer.parseInt(aux);
 
     public SQLUserDAO()
     {
@@ -89,7 +91,8 @@ public class SQLUserDAO implements IUserDAO
         PreparedStatement stm;
         try
         {
-            stm = conn.prepareStatement("INSERT INTO users VALUES("+ u.getEmail() +","+u.getPassword_hash()+","+u.getName()+","+u.getToken()+", 0);");
+            stm = conn.prepareStatement("INSERT INTO users VALUES("+id+","+ u.getEmail() +","+u.getPassword_hash()+","+u.getName()+","+u.getToken()+", 0);");
+            aux += 1;
             ResultSet result = stm.executeQuery();
             if (result.next())
                 return createUser(result);

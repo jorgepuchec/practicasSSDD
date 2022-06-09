@@ -46,16 +46,17 @@ def login():
             user = {"email": form.email.data, "password": form.password.data}
             #BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
             #print(form.email.data)
-            response = requests.post("http://"+os.environ['BACKEND_REST']+":8080/rest/checkLogin", data=user, headers={"Content-Type": "application/json"})
+            response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/checkLogin", data=json.dumps(user), headers={"Content-Type": "application/json"})
             #print("HOLA HE PRINTEADO")
 
             if response.status_code != 200:
-                error = 'Invalid Credentials. Please try again'
+                #error = 'Invalid Credentials. Please try again'
+                error=response.json()
             else:
                 campos = response.json()
                 #print(campos)
-                userValidado = User(campos[u'id'], campos[u'name'], campos[u'email'], campos[u'password'], campos[u'token'], campos['visits'])
-                users.append()
+                userValidado = User(campos[u'id'], campos[u'name'], campos[u'email'], form.password.data.encode('utf-8') )
+                users.append(userValidado)
                 login_user(userValidado, remember=form.remember_me.data)
                 return redirect(url_for('profile'))
         return render_template('login.html', form=form,  error=error)
@@ -73,7 +74,8 @@ def signup():
             BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
             response = requests.post('http://'+BACKEND_REST+':8080/users', data=json.dumps(user), headers=header)
             if response.status_code != 200:
-                error='Invalid User. Please, try again'
+                #error='Invalid User. Please, try again'
+                error=response.text
             else:    
                 return redirect(url_for('index'))
         return render_template('signup.html', form=form,  error=error)
@@ -112,7 +114,7 @@ def logout():
 @login_manager.user_loader
 def load_user(user_id):
     for user in users:
-        if user.id == int(user_id):
+        if user.id == user_id:
             return user
     return None
 

@@ -5,12 +5,14 @@ users = []
 
 class User(UserMixin):
 
-    def __init__(self, id, name, email, password, is_admin=False):
+    def __init__(self, id, name, email, password, token, visits,is_admin=False):
         self.id = id
         self.name = name
         self.email = email
         self.password = hashlib.sha256(password).hexdigest()
         self.is_admin = is_admin
+        self.token = token
+        self.visits = visits
 
     def set_password(self, password):
         self.password = hashlib.sha256(password).hexdigest()

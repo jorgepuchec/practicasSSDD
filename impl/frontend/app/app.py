@@ -50,12 +50,12 @@ def login():
             #print("HOLA HE PRINTEADO")
 
             if response.status_code != 200:
-                #error = 'Invalid Credentials. Please try again'
-                error=response.json()
+                error = 'Invalid Credentials. Please try again'
+                #error=response.json()
             else:
                 campos = response.json()
                 #print(campos)
-                userValidado = User(campos[u'id'], campos[u'name'], campos[u'email'], form.password.data.encode('utf-8') )
+                userValidado = User(campos[u'id'], campos[u'name'], campos[u'email'], form.password.data.encode('utf-8'), campos[u'token'], campos[u'visits'])
                 users.append(userValidado)
                 login_user(userValidado, remember=form.remember_me.data)
                 return redirect(url_for('profile'))

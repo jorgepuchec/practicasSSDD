@@ -43,14 +43,27 @@ def login():
         error = None
         form = LoginForm(request.form)
         if request.method == "POST" and  form.validate():
-            if form.email.data != 'admin@um.es' or form.password.data != 'admin':
-                error = 'Invalid Credentials. Please try again.'
+            user = {"email": form.email.data, "password": form.password.data}
+            BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
+            response = requests.post('http://'+BACKEND_REST+':8080/checkLogin', data=json.dumps(user), headers={"Content-Type": "application/json"})
+
+            if response.status_code != 200:
+                error: "Invalid Credentials. Please try again"
             else:
-                user = User(1, 'admin', form.email.data.encode('utf-8'),
-                            form.password.data.encode('utf-8'))
-                users.append(user)
-                login_user(user, remember=form.remember_me.data)
-                return redirect(url_for('index'))
+                campos = response.json()
+                print(campos)
+                userValidado = User(campos['id'], campos['name'], campos['email'], campos['password'], campos['token'], campos['visits'])
+                users.append()
+                login_user(userValidado, remember=form.remember_me.data)
+                return redirect(url_for('profile'))
+            #if form.email.data != 'admin@um.es' or form.password.data != 'admin':
+             #   error = 'Invalid Credentials. Please try again.'
+            #else:
+             #   user = User(1, 'admin', form.email.data.encode('utf-8'),
+              #              form.password.data.encode('utf-8'))
+               # users.append(user)
+                #login_user(user, remember=form.remember_me.data)
+               # return redirect(url_for('index'))
 
         return render_template('login.html', form=form,  error=error)
         
@@ -65,11 +78,7 @@ def signup():
             user = {"email":form.email.data, "password": form.password.data, "name": form.name.data}
             header = {"Content-Type": "application/json"}
             BACKEND_REST = os.environ.get('BACKEND_REST', 'localhost')
-            #
-            #Falla url
-            #
             response = requests.post('http://'+BACKEND_REST+':8080/users', data=json.dumps(user), headers=header)
-            
             if response.status_code != 200:
                 error='Invalid User. Please, try again'
             else:    

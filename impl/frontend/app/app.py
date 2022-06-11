@@ -51,7 +51,6 @@ def login():
                 error = 'Invalid Credentials. Please try again'
             else:
                 campos = response.json()
-                #print(campos)
                 userValidado = User(campos[u'id'], campos[u'name'], campos[u'email'], form.password.data.encode('utf-8'), campos[u'token'], campos[u'visits'])
                 users.append(userValidado)
                 login_user(userValidado, remember=form.remember_me.data)
@@ -68,11 +67,10 @@ def signup():
         if request.method == "POST":
             user = {"email":form.email.data, "password": form.password.data, "name": form.name.data}
             response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users", data=json.dumps(user), headers={"Content-Type": "application/json"})
-            #error = response.status_code
             if response.status_code != 200:
-                error=response.text
+                error="User already registered. Please try again"
             else:    
-                return redirect(url_for('index'))
+                return redirect(url_for('login'))
         return render_template('signup.html', form=form,  error=error)
         
 

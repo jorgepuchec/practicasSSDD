@@ -32,7 +32,6 @@ public class UsersEndpoint
             return Response.status(Status.FORBIDDEN).build();
 
         } else{
-
             UserDTO u = UserDTOUtils.toDTO(impl.registerUser(user).orElse(null));
 
             if(u != null){

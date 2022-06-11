@@ -100,11 +100,11 @@ public class AppLogicImpl
 
         Optional<User> u = dao.getUserByEmail(udto.getEmail());
         if (u.isPresent()){
+            System.out.println("1. "+u.toString());
             return Optional.empty();
 
         } else {
         	String token = udto.getName()+udto.getEmail();
-
             User newUser = new User(udto.getEmail(), UserUtils.md5pass(udto.getPassword()), udto.getName(), UserUtils.md5pass(token), 0);
             return dao.saveUser(newUser);
 

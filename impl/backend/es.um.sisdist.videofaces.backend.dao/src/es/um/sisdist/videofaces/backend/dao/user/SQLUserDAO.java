@@ -20,7 +20,7 @@ import es.um.sisdist.videofaces.backend.dao.models.User;
 public class SQLUserDAO implements IUserDAO
 {
     Connection conn;
-    private int aux = 1;
+    private int aux = 3;
     private String id = String.valueOf(aux);
 
     public SQLUserDAO()
@@ -98,10 +98,11 @@ public class SQLUserDAO implements IUserDAO
             stm.setString(4, u.getName());
             stm.setString(5, u.getToken());
             stm.setInt(6, 0);
+            this.aux ++;
+            this.id = String.valueOf(aux);
 
-            aux += 1;
+
             stm.executeUpdate();
-            conn.commit();
 
             return getUserByEmail(u.getEmail());
         } catch (SQLException e)

@@ -28,9 +28,15 @@ public class CheckLoginEndpoint
     {
         //System.out.println(uo.getEmail()+" "+uo.getPassword());
         Optional<User> u = impl.checkLogin(uo.getEmail(), uo.getPassword());
-        if (u.isPresent())
+        if (u.isPresent()){
+
+            //sumar visitas
+            impl.userVisited(uo.getEmail());
+            u = impl.getUserByEmail(uo.getEmail()); // actualizar visitas
             return Response.ok(UserDTOUtils.toDTO(u.get())).build();
-        else
+        }
+        else{
             return Response.status(Status.FORBIDDEN).build();
+        }
     }
 }

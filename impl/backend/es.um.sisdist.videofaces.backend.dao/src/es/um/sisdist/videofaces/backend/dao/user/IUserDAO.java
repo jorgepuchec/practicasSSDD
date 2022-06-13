@@ -11,4 +11,6 @@ public interface IUserDAO
     public Optional<User> getUserByEmail(String id);
     
     public Optional<User> saveUser(User u);
+
+    public void addUserVisits(String email);
 }

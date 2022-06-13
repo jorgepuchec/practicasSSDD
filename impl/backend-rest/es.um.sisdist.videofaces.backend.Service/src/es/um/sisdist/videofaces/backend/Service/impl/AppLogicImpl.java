@@ -110,4 +110,10 @@ public class AppLogicImpl
 
         }
     }
+
+    public void userVisited(String userEmail){
+
+        dao.addUserVisits(userEmail);
+
+    }
 }

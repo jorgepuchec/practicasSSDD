@@ -51,6 +51,7 @@ public class UsersEndpoint
     @Produces(MediaType.APPLICATION_JSON)
     public UserDTO getUserInfo(@PathParam("username") String username)
     {
-        return UserDTOUtils.toDTO(impl.getUserByEmail(username).orElse(null));
+        impl.userVisited(username, "id");
+        return UserDTOUtils.toDTO(impl.getUserById(username).orElse(null));
     }
 }

@@ -116,4 +116,11 @@ public class AppLogicImpl
         dao.addUserVisits(userEmail);
 
     }
+
+    public void userVisited(String userId, String aux){
+
+        dao.addUserVisitsId(userId);
+
+    }
+
 }

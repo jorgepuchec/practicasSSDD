@@ -47,8 +47,20 @@ public class SQLUserDAO implements IUserDAO
     @Override
     public Optional<User> getUserById(String id)
     {
-        // TODO Auto-generated method stub
-        return null;
+        PreparedStatement stm;
+        try
+        {
+            stm = conn.prepareStatement("SELECT * from users WHERE id = ?");
+            stm.setString(1, id);
+            ResultSet result = stm.executeQuery();
+            System.out.println(result.toString());
+            if (result.next())
+                return createUser(result);
+        } catch (SQLException e)
+        {
+            // Fallthrough
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -77,6 +89,20 @@ public class SQLUserDAO implements IUserDAO
         {
             stm = conn.prepareStatement("UPDATE users SET visits = visits + 1 WHERE email = ?");
             stm.setString(1, email);
+            stm.executeUpdate();
+            //System.out.println(result.toString());
+        } catch (SQLException e)
+        {
+            // Fallthrough
+        }
+    }
+
+    public void addUserVisitsId(String id){
+        PreparedStatement stm;
+        try
+        {
+            stm = conn.prepareStatement("UPDATE users SET visits = visits + 1 WHERE id = ?");
+            stm.setString(1, id);
             stm.executeUpdate();
             //System.out.println(result.toString());
         } catch (SQLException e)

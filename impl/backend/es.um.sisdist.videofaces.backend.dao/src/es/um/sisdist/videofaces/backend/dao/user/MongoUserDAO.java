@@ -66,4 +66,8 @@ public class MongoUserDAO implements IUserDAO
     public void addUserVisits(String email){
     }
 
+    @Override
+    public void addUserVisitsId(String id){
+    }
+
 }

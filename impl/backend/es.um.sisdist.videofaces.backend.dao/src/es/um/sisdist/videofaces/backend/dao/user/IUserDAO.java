@@ -13,4 +13,6 @@ public interface IUserDAO
     public Optional<User> saveUser(User u);
 
     public void addUserVisits(String email);
+
+    public void addUserVisitsId(String id);
 }

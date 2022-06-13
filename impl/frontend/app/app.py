@@ -46,7 +46,6 @@ def login():
             user = {"email": form.email.data, "password": form.password.data}
             response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/checkLogin", data=json.dumps(user), headers={"Content-Type": "application/json"})
 
-
             if response.status_code != 200:
                 error = 'Invalid Credentials. Please try again'
             else:
@@ -96,6 +95,15 @@ def send_video():
 @app.route('/profile')
 @login_required
 def profile():
+    #if request.method == "GET":
+    user = {"id":current_user.id}
+    response = response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/"+user[u'id'])
+    if response.status_code != 200:
+        #error
+        print("hola")
+    else:
+        current_user.visits = response.json()[u'visits']
+        return render_template('profile.html')
     return render_template('profile.html')
 
 @app.route('/logout')

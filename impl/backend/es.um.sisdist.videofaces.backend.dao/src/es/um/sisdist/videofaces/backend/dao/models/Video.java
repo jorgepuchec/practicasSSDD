@@ -46,6 +46,17 @@ public class Video
         this.fileInputStream =inputStream;
     }
 
+    public Video(String id, String userid, String date, PROCESS_STATUS pstatus, String filename)
+    {
+        super();
+        this.vid = id;
+        this.userid = userid;
+        this.pstatus = pstatus;
+        this.date = date;
+        this.filename = filename;
+    }
+
+
     /**
      * @return the id
      */

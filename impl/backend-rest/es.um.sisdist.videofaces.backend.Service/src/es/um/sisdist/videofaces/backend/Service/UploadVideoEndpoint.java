@@ -71,10 +71,17 @@ public class UploadVideoEndpoint
     public Response video(@PathParam("userId") String userId){
         
         LinkedList<Video> vs = impl.getVideosById(userId);
-        System.out.println("HE PRINTEADO "+ vs.size());
+        System.out.println("HE PRINTEADO "+ vs.get(0).getFilename());
+        LinkedList<VideoDTO> vddto = new LinkedList<VideoDTO>();
+        for(Video v : vs){
+            vddto.add(VideoDTOUtils.toDTO(v));
+        }
 
         if(!vs.isEmpty()){
-            return Response.ok(vs).build();
+
+            //return new LinkedList<VideoDTO>();
+            return Response.status(Response.Status.OK).entity(vddto).type(MediaType.APPLICATION_JSON).build();
+            //return Response.ok(vddto).build();
         } else {
             return Response.status(Status.FORBIDDEN).build();
         }

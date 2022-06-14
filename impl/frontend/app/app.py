@@ -5,7 +5,7 @@ import json
 import os
 
 # Usuarios
-from models import users, User
+from models import users, User, Video
 
 # Login
 from forms import LoginForm, SignupForm, SendVideoForm
@@ -102,12 +102,14 @@ def video_gallery():
     uvideos = []
     id_user = current_user.id
     response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video")
-    error = response.json()
+    #error = response.json()
     if response.status_code == 200:
         videos = response.json()
-        error = response.json()
+        #error = response.json()
         for video in videos:
-            uvideos.append(Video(video[u'id'],video[u'userid'], video[u'date'], video[u'filename']))
+            uvideos.append(Video(video[u'vid'],video[u'userid'], video[u'date'], video[u'filename']))
+        #uvideos.append(Video("pepito","papaito", "09109230129", "porno"))
+        error = len(uvideos)
     return render_template('videogallery.html',uvideos=uvideos, error=error)
 
 

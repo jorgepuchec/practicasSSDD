@@ -11,8 +11,7 @@ public class VideoDTO
     private String userid;
     private String date;
     private String filename; // En caso de que se utilice un esquema híbrido de usar un sistema de ficheros
-    private InputStream fileInputStream;
-    private Video.PROCESS_STATUS pstatus;
+    private int pstatus;
 
     /**
      * @return the id
@@ -81,56 +80,43 @@ public class VideoDTO
     /**
      * @return the pstatus
      */
-    public Video.PROCESS_STATUS getPstatus()
+    public int getPstatus()
     {
         return pstatus;
     }
 
-    /**
-     * @param pstatus the pstatus to set
-     */
-    public void setPstatus(Video.PROCESS_STATUS pstatus)
-    {
-        this.pstatus = pstatus;
-    }
 
-    /**
-     * @return the fileInputStream
-     */
-    public InputStream getFileInputStream()
-    {
-        return fileInputStream;
-    }
 
-    /**
-     * @param fileInputStream the fileInputStream to set
-     */
-    public void setFileInputStream(InputStream fileInputStream)
-    {
-        this.fileInputStream = fileInputStream;
-    }
 
-    public VideoDTO(String id, String userid, String date, String filename, Video.PROCESS_STATUS pstatus, InputStream fileInputStream)
+    public VideoDTO(String id, String userid, String date, String filename, Video.PROCESS_STATUS pstatus)
     {
         super();
         this.vid = id;
         this.userid = userid;
         this.date = date;
         this.filename = filename;
-        this.pstatus = pstatus;
-        this.fileInputStream = fileInputStream;
+
+
+        if(pstatus==Video.PROCESS_STATUS.PROCESSING){
+            this.pstatus = 0;
+        }else{
+            this.pstatus = 1;
+        }
     }
 
 
-    public VideoDTO(String userid, String date, String filename, Video.PROCESS_STATUS pstatus, InputStream fileInputStream)
+    public VideoDTO(String userid, String date, String filename, Video.PROCESS_STATUS pstatus)
     {
         super();
         this.vid = "";
         this.userid = userid;
         this.date = date;
         this.filename = filename;
-        this.pstatus = pstatus;
-        this.fileInputStream = fileInputStream;
+        if(pstatus==Video.PROCESS_STATUS.PROCESSING){
+            this.pstatus = 0;
+        }else{
+            this.pstatus = 1;
+        }
     }
     
 

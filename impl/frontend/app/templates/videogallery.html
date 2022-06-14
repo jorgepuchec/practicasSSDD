@@ -8,7 +8,8 @@
 <h2> VIDEOS </h2>
 
 <style>
-table, th, td { bord er:lpx solid black;
+table, th, td { 
+    border:1px solid black;
 }
 </style>
 <body>
@@ -18,30 +19,25 @@ table, th, td { bord er:lpx solid black;
 
     <tr>
         <th>File ID</th>
-        <th>Name</th>
+        <th>Filename</th>
         <th>Date</th>
     </tr>
 
-    {% for video in user_videos %}
+    {% for video in uvideos %}
 
         <tr>
             
         <td>{{video.id}}</td>
-        <td>{{video.userId}}</td>
+        <td>{{video.name}}</td>
         <td>{{video.date}}</td>
 
         </tr>
 
     {% endfor %}
 
-    <p>Error: {{error}}</p>
-
-
 </table>
 
-
 </body>
-
 
 {% endblock %}
 

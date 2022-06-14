@@ -5,7 +5,14 @@ public class VideoDTOUtils{
 
     public static Video fromDTO(VideoDTO vdto)
     {
-        return new Video(vdto.getVid(), vdto.getUserid(), vdto.getDate(), vdto.getFilename(), vdto.getPstatus(), vdto.getFileInputStream());
+        Video.PROCESS_STATUS estado;
+        if(vdto.getPstatus()==0){
+            estado = Video.PROCESS_STATUS.PROCESSING;
+        }else{
+            estado = Video.PROCESS_STATUS.PROCESSED;
+        }
+
+        return new Video(vdto.getVid(), vdto.getUserid(), vdto.getDate(), estado, vdto.getFilename());
     }
 
     public static VideoDTO toDTO(Video v)
@@ -14,6 +21,6 @@ public class VideoDTOUtils{
             return null;
         }
         return new VideoDTO(v.getVid(), v.getUserid(), 
-            v.getDate(), v.getFilename(), v.getPstatus(), v.getInput());
+            v.getDate(), v.getFilename(), v.getPstatus());
     }
 }

@@ -22,6 +22,7 @@ import es.um.sisdist.videofaces.backend.grpc.VideoAvailability;
 import es.um.sisdist.videofaces.backend.grpc.VideoSpec;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import java.util.*;
 
 /**
  * @author dsevilla
@@ -132,6 +133,12 @@ public class AppLogicImpl
     public Optional<Video> saveVideo(Video video){
         
         return daoVideo.saveVideo(video);
+
+    }
+
+    public LinkedList<Video> getVideosById(String userId){
+
+        return daoVideo.getVideosById(userId);
 
     }
 

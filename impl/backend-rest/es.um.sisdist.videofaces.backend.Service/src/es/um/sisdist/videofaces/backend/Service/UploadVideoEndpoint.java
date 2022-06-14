@@ -17,12 +17,14 @@ import java.time.LocalDate;
 import java.net.URI;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response.Status;
+import java.util.*;
 
 @Path("/users/{userId}/video")
 public class UploadVideoEndpoint
@@ -63,11 +65,19 @@ public class UploadVideoEndpoint
 
         }
     }
-/*
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response video(){
-        //TODO
-        return null;
-    } */
+    public Response video(@PathParam("userId") String userId){
+        
+        LinkedList<Video> vs = impl.getVideosById(userId);
+        System.out.println("HE PRINTEADO "+ vs.size());
+
+        if(!vs.isEmpty()){
+            return Response.ok(vs).build();
+        } else {
+            return Response.status(Status.FORBIDDEN).build();
+        }
+
+    }
 }

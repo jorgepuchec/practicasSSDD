@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.*;
 
 import es.um.sisdist.videofaces.backend.dao.models.Video;
 
@@ -62,6 +63,28 @@ public class SQLVideoDAO implements IVideoDAO
             // Fallthrough
         }
         return Optional.empty();
+    }
+    @Override
+    public LinkedList<Video> getVideosById(String userId)
+    {
+        PreparedStatement stm;
+        try
+        {
+            stm = conn.prepareStatement("SELECT * from videos WHERE userid = ?");
+            stm.setString(1, userId);
+            ResultSet result = stm.executeQuery();
+            System.out.println(result.toString());
+
+            LinkedList<Video> listaVideos = new LinkedList<Video>();
+            while(result.next()){
+                listaVideos.add(createVideo(result).get());
+            }
+            return listaVideos;
+        } catch (SQLException e)
+        {
+            // Fallthrough
+        }
+        return new LinkedList<Video>();
     }
 
     

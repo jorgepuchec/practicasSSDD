@@ -16,6 +16,8 @@ from forms import SendVideoForm
 app = Flask(__name__, static_url_path='')
 login_manager = LoginManager()
 login_manager.init_app(app) # Para mantener la sesión
+global uvideos
+
 
 # Configurar el secret_key. OJO, no debe ir en un servidor git público.
 # Python ofrece varias formas de almacenar esto de forma segura, que
@@ -91,6 +93,22 @@ def send_video():
         else:
             error = response.text
     return render_template('send_video.html', form=form, error=error)
+
+
+@app.route('/video_gallery', methods=['GET'])
+@login_required
+def video_gallery():
+    error = None
+    uvideos = []
+    id_user = current_user.id
+    response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video")
+    error = response.json()
+    if response.status_code == 200:
+        videos = response.json()
+        error = response.json()
+        for video in videos:
+            uvideos.append(Video(video[u'id'],video[u'userid'], video[u'date'], video[u'filename']))
+    return render_template('videogallery.html',uvideos=uvideos, error=error)
 
 
 @app.route('/profile')

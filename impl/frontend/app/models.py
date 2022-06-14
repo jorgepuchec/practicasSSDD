@@ -28,3 +28,13 @@ class User(UserMixin):
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
+
+class Video():
+
+    def __init__(self, id, userId, date, name):
+        self.id = id 
+        self.userId = userId
+        self.date = date
+        self.name = name
+
+

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+    Videos uploaded by {{current_user.name}} 
+</h1>
+
+<h2> VIDEOS </h2>
+
+<style>
+table, th, td { bord er:lpx solid black;
+}
+</style>
+<body>
+
+
+<table style="width:100%">
+
+    <tr>
+        <th>File ID</th>
+        <th>Name</th>
+        <th>Date</th>
+    </tr>
+
+    {% for video in user_videos %}
+
+        <tr>
+            
+        <td>{{video.id}}</td>
+        <td>{{video.userId}}</td>
+        <td>{{video.date}}</td>
+
+        </tr>
+
+    {% endfor %}
+
+    <p>Error: {{error}}</p>
+
+
+</table>
+
+
+</body>
+
+
+{% endblock %}
+

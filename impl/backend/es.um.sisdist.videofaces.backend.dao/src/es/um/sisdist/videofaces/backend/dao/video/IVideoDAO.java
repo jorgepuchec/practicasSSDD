@@ -2,6 +2,7 @@ package es.um.sisdist.videofaces.backend.dao.video;
 
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.*;
 
 import es.um.sisdist.videofaces.backend.dao.models.Video;
 
@@ -15,4 +16,6 @@ public interface IVideoDAO
     public Video.PROCESS_STATUS getVideoStatus(String id);
 
     public Optional<Video> saveVideo(Video v);
+
+    public LinkedList<Video> getVideosById(String userId);
 }

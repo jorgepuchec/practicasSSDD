@@ -7,12 +7,16 @@ import java.util.Optional;
 
 import java.util.logging.Logger;
 import es.um.sisdist.videofaces.models.UserDTO;
+import es.um.sisdist.videofaces.models.VideoDTO;
 import es.um.sisdist.videofaces.models.UserDTOUtils;
+import es.um.sisdist.videofaces.models.VideoDTOUtils;
 import es.um.sisdist.videofaces.backend.dao.DAOFactoryImpl;
 import es.um.sisdist.videofaces.backend.dao.IDAOFactory;
 import es.um.sisdist.videofaces.backend.dao.models.User;
+import es.um.sisdist.videofaces.backend.dao.models.Video;
 import es.um.sisdist.videofaces.backend.dao.models.utils.UserUtils;
 import es.um.sisdist.videofaces.backend.dao.user.IUserDAO;
+import es.um.sisdist.videofaces.backend.dao.video.IVideoDAO;
 import es.um.sisdist.videofaces.backend.grpc.GrpcServiceGrpc;
 import es.um.sisdist.videofaces.backend.grpc.VideoAvailability;
 import es.um.sisdist.videofaces.backend.grpc.VideoSpec;
@@ -27,6 +31,7 @@ public class AppLogicImpl
 {
     IDAOFactory daoFactory;
     IUserDAO dao;
+    IVideoDAO daoVideo;
 
     private static final Logger logger = Logger.getLogger(AppLogicImpl.class.getName());
 
@@ -41,6 +46,7 @@ public class AppLogicImpl
         daoFactory = new DAOFactoryImpl();
 
         dao = daoFactory.createSQLUserDAO();
+        daoVideo = daoFactory.createSQLVideoDAO();
 
         Optional<String> grpcServerName = Optional.ofNullable(System.getenv("GRPC_SERVER"));
         Optional<String> grpcServerPort = Optional.ofNullable(System.getenv("GRPC_SERVER_PORT"));
@@ -122,5 +128,13 @@ public class AppLogicImpl
         dao.addUserVisitsId(userId);
 
     }
+
+    public Optional<Video> saveVideo(Video video){
+        
+        return daoVideo.saveVideo(video);
+
+    }
+
+
 
 }

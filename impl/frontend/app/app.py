@@ -84,9 +84,10 @@ def send_video():
         # print(requests.Request('POST', 'http://localhost:8080/rest/uploadVideo',
         #                        files=files).prepare().body.decode('utf-8'))
         REST_SERVER = os.environ.get('REST_SERVER', 'localhost')
-        response = requests.post('http://'+REST_SERVER+':8080/Service/uploadVideo', files=files)
-        if response.status_code == 200:
-            error = "Video uploaded successfully"
+        id_user = current_user.id
+        response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video", files=files)
+        if response.status_code == 201:
+            error = 'Video uploaded!!'
         else:
             error = response.text
     return render_template('send_video.html', form=form, error=error)

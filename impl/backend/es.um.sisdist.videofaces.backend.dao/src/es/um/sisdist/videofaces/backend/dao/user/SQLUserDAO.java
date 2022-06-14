@@ -2,6 +2,7 @@
  *
  */
 package es.um.sisdist.videofaces.backend.dao.user;
+import java.io.InputStream;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -135,6 +136,7 @@ public class SQLUserDAO implements IUserDAO
             stm = conn.prepareStatement("INSERT INTO users VALUES(?, ?, ?, ?, ?, ?)");
             stm.setString(1, id);
             stm.setString(2, u.getEmail());
+            stm.setString(3, u.getPassword_hash());
             stm.setString(3, u.getPassword_hash());
             stm.setString(4, u.getName());
             stm.setString(5, u.getToken());

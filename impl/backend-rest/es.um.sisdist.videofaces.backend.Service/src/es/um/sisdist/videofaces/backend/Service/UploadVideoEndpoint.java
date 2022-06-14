@@ -6,16 +6,25 @@ import java.nio.file.StandardCopyOption;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-
+import es.um.sisdist.videofaces.models.UserDTO;
+import es.um.sisdist.videofaces.models.UserDTOUtils;
 import es.um.sisdist.videofaces.backend.Service.impl.AppLogicImpl;
+import es.um.sisdist.videofaces.backend.dao.models.Video;
+import es.um.sisdist.videofaces.models.VideoDTO;
+import es.um.sisdist.videofaces.models.VideoDTOUtils;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.net.URI;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.Response.Status;
 
-@Path("/uploadVideo")
+@Path("/users/{userId}/video")
 public class UploadVideoEndpoint
 {
     private AppLogicImpl impl = AppLogicImpl.getInstance();
@@ -24,13 +33,41 @@ public class UploadVideoEndpoint
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadVideo(@FormDataParam("file") InputStream fileInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileMetaData) throws Exception
+            @FormDataParam("file") FormDataContentDisposition fileMetaData,
+            @PathParam("userId") String userId) throws Exception
     {
-        File targetFile = new File("/tmp/output");
+        UserDTO user = UserDTOUtils.toDTO(impl.getUserById(userId).orElse(null));
+        if (user == null){
 
-        java.nio.file.Files.copy(fileInputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return Response.status(Status.FORBIDDEN).build();
 
-        fileInputStream.close();
-        return Response.ok(fileMetaData.getFileName()).build();
+        }else{
+
+            LocalDate date = LocalDate.now();
+            String fecha = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            Video v = new Video(userId, fecha, Video.PROCESS_STATUS.PROCESSING, fileMetaData.getFileName(), fileInputStream);
+
+            VideoDTO vDTO = VideoDTOUtils.toDTO(impl.saveVideo(v).orElse(null));
+
+            if(vDTO != null){
+
+                return Response.created(new URI(vDTO.getVid())).build();
+
+            } else {
+
+                return Response.status(Status.FORBIDDEN).build();
+                
+            }
+
+
+        }
     }
+/*
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response video(){
+        //TODO
+        return null;
+    } */
 }

@@ -2,6 +2,7 @@
  *
  */
 package es.um.sisdist.videofaces.backend.dao.models;
+import java.io.InputStream;
 
 public class Video
 {
@@ -16,6 +17,7 @@ public class Video
     private PROCESS_STATUS pstatus;
     private String date;
     private String filename; // En caso de que se utilice un esquema híbrido de usar un sistema de ficheros
+    private InputStream fileInputStream;
 
     // Note: blob data is not included
 
@@ -23,7 +25,7 @@ public class Video
     {
     }
 
-    public Video(String id, String userid, PROCESS_STATUS pstatus, String date, String filename)
+    public Video(String id, String userid, String date, String filename, PROCESS_STATUS pstatus, InputStream inputStream)
     {
         super();
         this.vid = id;
@@ -31,6 +33,17 @@ public class Video
         this.pstatus = pstatus;
         this.date = date;
         this.filename = filename;
+        this.fileInputStream =inputStream;
+    }
+    public Video(String userid, String date, PROCESS_STATUS pstatus, String filename, InputStream inputStream)
+    {
+        super();
+        this.vid = "";
+        this.userid = userid;
+        this.pstatus = pstatus;
+        this.date = date;
+        this.filename = filename;
+        this.fileInputStream =inputStream;
     }
 
     /**
@@ -111,5 +124,10 @@ public class Video
     public void setFilename(String filename)
     {
         this.filename = filename;
+    }
+
+    public InputStream getInput()
+    {
+        return fileInputStream;
     }
 }

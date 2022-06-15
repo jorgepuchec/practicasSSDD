@@ -17,6 +17,7 @@ app = Flask(__name__, static_url_path='')
 login_manager = LoginManager()
 login_manager.init_app(app) # Para mantener la sesión
 global uvideos
+global ufaces
 
 
 # Configurar el secret_key. OJO, no debe ir en un servidor git público.
@@ -108,9 +109,24 @@ def video_gallery():
         #error = response.json()
         for video in videos:
             uvideos.append(Video(video[u'vid'],video[u'userid'], video[u'date'], video[u'filename']))
-        #uvideos.append(Video("pepito","papaito", "09109230129", "porno"))
         error = len(uvideos)
     return render_template('videogallery.html',uvideos=uvideos, error=error)
+
+@app.route('/faces_gallery', methods=['GET'])
+@login_required
+def faces_gallery():
+    videoid = request.args.get('videoid')
+    ufaces = []
+    error = None
+    id_user = current_user.id
+    response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video/{videoid}")
+    error = response.json()
+    if response.status_code == 200:
+        faces = response.json()
+        #error = response.json()
+        for face in faces:
+            ufaces.append(Face(face[u'fid'],face[u'fileInputStream']))
+    return render_template('facesfallery.html',ufaces=ufaces, error=error)
 
 
 @app.route('/profile')

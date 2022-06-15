@@ -12,6 +12,9 @@ import es.um.sisdist.videofaces.backend.Service.impl.AppLogicImpl;
 import es.um.sisdist.videofaces.backend.dao.models.Video;
 import es.um.sisdist.videofaces.models.VideoDTO;
 import es.um.sisdist.videofaces.models.VideoDTOUtils;
+import es.um.sisdist.videofaces.models.FaceDTO;
+import es.um.sisdist.videofaces.models.FaceDTOUtils;
+import es.um.sisdist.videofaces.backend.dao.models.Face;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.net.URI;
@@ -25,6 +28,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response.Status;
 import java.util.*;
+import es.um.sisdist.videofaces.backend.dao.models.Face;
 
 @Path("/users/{userId}/video")
 public class UploadVideoEndpoint
@@ -83,6 +87,25 @@ public class UploadVideoEndpoint
             //return new LinkedList<VideoDTO>();
             return Response.status(Response.Status.OK).entity(vddto).type(MediaType.APPLICATION_JSON).build();
             //return Response.ok(vddto).build();
+        } else {
+            return Response.status(Status.FORBIDDEN).build();
+        }
+
+    }
+
+    @GET
+    @Path("/{videoid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response face(@PathParam("videoid") String videoId){
+        LinkedList<Face> faces = impl.getFacesByVideoId(videoId);
+        System.out.println("HE PRINTEADO "+ faces.size());
+        LinkedList<FaceDTO> facesdto = new LinkedList<FaceDTO>();
+        for(Face f : faces){
+            facesdto.add(FaceDTOUtils.toDTO(f));
+        }
+
+        if(!faces.isEmpty()){
+            return Response.status(Response.Status.OK).entity(facesdto).type(MediaType.APPLICATION_JSON).build();
         } else {
             return Response.status(Status.FORBIDDEN).build();
         }

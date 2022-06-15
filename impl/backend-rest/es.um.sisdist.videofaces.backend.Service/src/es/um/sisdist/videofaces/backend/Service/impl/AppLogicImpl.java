@@ -8,15 +8,19 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import es.um.sisdist.videofaces.models.UserDTO;
 import es.um.sisdist.videofaces.models.VideoDTO;
+import es.um.sisdist.videofaces.models.FaceDTO;
 import es.um.sisdist.videofaces.models.UserDTOUtils;
 import es.um.sisdist.videofaces.models.VideoDTOUtils;
+import es.um.sisdist.videofaces.models.FaceDTOUtils;
 import es.um.sisdist.videofaces.backend.dao.DAOFactoryImpl;
 import es.um.sisdist.videofaces.backend.dao.IDAOFactory;
 import es.um.sisdist.videofaces.backend.dao.models.User;
 import es.um.sisdist.videofaces.backend.dao.models.Video;
+import es.um.sisdist.videofaces.backend.dao.models.Face;
 import es.um.sisdist.videofaces.backend.dao.models.utils.UserUtils;
 import es.um.sisdist.videofaces.backend.dao.user.IUserDAO;
 import es.um.sisdist.videofaces.backend.dao.video.IVideoDAO;
+import es.um.sisdist.videofaces.backend.dao.face.IFaceDAO;
 import es.um.sisdist.videofaces.backend.grpc.GrpcServiceGrpc;
 import es.um.sisdist.videofaces.backend.grpc.VideoAvailability;
 import es.um.sisdist.videofaces.backend.grpc.VideoSpec;
@@ -39,6 +43,7 @@ public class AppLogicImpl
     IDAOFactory daoFactory;
     IUserDAO dao;
     IVideoDAO daoVideo;
+    IFaceDAO daoFace;
 
     private static final Logger logger = Logger.getLogger(AppLogicImpl.class.getName());
 
@@ -54,6 +59,8 @@ public class AppLogicImpl
 
         dao = daoFactory.createSQLUserDAO();
         daoVideo = daoFactory.createSQLVideoDAO();
+        daoFace = daoFactory.createSQLFaceDAO();
+
 
         Optional<String> grpcServerName = Optional.ofNullable(System.getenv("GRPC_SERVER"));
         Optional<String> grpcServerPort = Optional.ofNullable(System.getenv("GRPC_SERVER_PORT"));
@@ -187,6 +194,10 @@ public class AppLogicImpl
         return daoVideo.getVideosById(userId);
         //return new LinkedList<Video>();
 
+    }
+
+    public LinkedList<Face> getFacesByVideoId(String videoId){
+        return daoFace.getFacesByVideoId(videoId);
     }
 
 

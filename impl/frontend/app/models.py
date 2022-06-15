@@ -37,4 +37,8 @@ class Video():
         self.date = date
         self.name = name
 
+class Face():
+    def __init__(self, id, data):
+        self.id = id
+        self.data = data
 

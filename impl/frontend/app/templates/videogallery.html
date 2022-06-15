@@ -28,7 +28,7 @@ table, th, td {
         <tr>
             
         <td>{{video.id}}</td>
-        <td>{{video.name}}</td>
+        <td><a class="nav-link" href="{{url_for("faces_gallery", videoid=video.id) }}">{{video.name}}</a></td>
         <td>{{video.date}}</td>
 
         </tr>

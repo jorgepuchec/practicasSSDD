@@ -29,33 +29,38 @@ import es.um.sisdist.videofaces.backend.dao.DAOFactoryImpl;
 import es.um.sisdist.videofaces.backend.dao.IDAOFactory;
 import es.um.sisdist.videofaces.backend.dao.models.User;
 import es.um.sisdist.videofaces.backend.dao.models.Video;
+import java.lang.Thread;
+import java.io.*;
 
 /**
  * OpenIMAJ Hello world!
  *
  */
-public class VideoFaces
+public class VideoFaces extends Thread
 {
 
     IDAOFactory daoFactory;
     IUserDAO dao;
     IVideoDAO daoVideo;
 
-    String idVideo;
+    public String idVideo;
 
-    public VideoFaces(String idVideo){
-        this.idVideo = idVideo;
+    public static VideoFaces(){
         daoFactory = new DAOFactoryImpl();
         dao = daoFactory.createSQLUserDAO();
         daoVideo = daoFactory.createSQLVideoDAO();
     }
 
-    public static void main(String[] args) throws IOException
+    public static void setId(String idVideo){
+        this.idVideo = idVideo;
+    }
+
+    public static void run() throws IOException
     {
 
         // VideoCapture vc = new VideoCapture( 320, 240 );
         // VideoDisplay<MBFImage> video = VideoDisplay.createVideoDisplay( vc );
-        Video<MBFImage> video = new XuggleVideo(daoVideo.getVideoById(args[0]).get().getInput());
+        Video<MBFImage> video = new XuggleVideo(daoVideo.getVideoById(idVideo).get().getInput());
         VideoDisplay<MBFImage> vd = VideoDisplay.createOffscreenVideoDisplay(video);
 
         // El Thread de procesamiento de vídeo se termina al terminar el vídeo.

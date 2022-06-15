@@ -13,6 +13,7 @@ import es.um.sisdist.videofaces.backend.grpc.VideoAvailabilityOrBuilder;
 import es.um.sisdist.videofaces.backend.grpc.VideoSpec;
 import io.grpc.stub.StreamObserver;
 import es.um.sisdist.videofaces.backend.facedetect.VideoFaces;
+//import es.um.sisdist.facedetect.*;
 
 class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase 
 {
@@ -25,7 +26,7 @@ class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase
 	}
 
     
-	@Override
+	//@Override
 	public StreamObserver<VideoSpec> processVideo(StreamObserver<Empty> responseObserver)
 	{
 		responseObserver.onNext(Empty.newBuilder().build());
@@ -41,7 +42,9 @@ class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase
 			@Override
 			public void onNext(VideoSpec video){
 				logger.info("Add video "+ video.getId());
-				new VideoFaces(video.getId()).start();
+				VideoFaces a = new VideoFaces();
+				a.setId(video.getId());
+				a.start();
 			}
 		};
 

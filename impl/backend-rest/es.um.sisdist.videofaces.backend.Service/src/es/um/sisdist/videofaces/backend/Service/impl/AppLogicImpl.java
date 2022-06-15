@@ -20,6 +20,12 @@ import es.um.sisdist.videofaces.backend.dao.video.IVideoDAO;
 import es.um.sisdist.videofaces.backend.grpc.GrpcServiceGrpc;
 import es.um.sisdist.videofaces.backend.grpc.VideoAvailability;
 import es.um.sisdist.videofaces.backend.grpc.VideoSpec;
+import io.grpc.StatusRuntimeException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import com.google.protobuf.Empty;
+import io.grpc.stub.StreamObserver;
+
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import java.util.*;
@@ -90,9 +96,11 @@ public class AppLogicImpl
 
         try{
             final CountDownLatch finishLatch = new CountDownLatch(1);
-            StreamObserver<Empty> soEmpty = new StreamObserver<Empty>;
+            StreamObserver<Empty> soEmpty = new StreamObserver<Empty>(){
                 @Override
-                public void onNext(Empty value){}
+                public void onNext(Empty value){
+
+                }
                 @Override
                 public void onError(Throwable t) {
                     finishLatch.countDown();
@@ -101,7 +109,7 @@ public class AppLogicImpl
                 public void onCompleted(){
                     finishLatch.countDown();
                 }
-
+            };
             StreamObserver<VideoSpec> so = asyncStub.processVideo(soEmpty);
             so.onNext(VideoSpec.newBuilder().setId(videoId).build());  
             so.onCompleted();
@@ -109,12 +117,15 @@ public class AppLogicImpl
             //esperar respuesta
             if(finishLatch.await(1, TimeUnit.SECONDS)){
                 logger.info("Received response.");
-            } esle {
+            } else {
                 logger.info("Not received response.");
             }
 
         } catch (StatusRuntimeException e){
 
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         

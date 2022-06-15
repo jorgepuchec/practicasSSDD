@@ -1,4 +1,4 @@
-package es.um.sisdist.facedetect;
+package es.um.sisdist.videofaces.backend.facedetect;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +19,9 @@ import org.openimaj.video.VideoDisplay.EndAction;
 import org.openimaj.video.VideoDisplayListener;
 import org.openimaj.video.VideoPositionListener;
 import org.openimaj.video.xuggle.XuggleVideo;
-import es.um.sisdist.videofaces.backend.dao.user.IUserDAO;
 import es.um.sisdist.videofaces.backend.dao.video.IVideoDAO;
-import es.um.sisdist.videofaces.models.UserDTO;
-import es.um.sisdist.videofaces.models.VideoDTO;
-import es.um.sisdist.videofaces.models.UserDTOUtils;
-import es.um.sisdist.videofaces.models.VideoDTOUtils;
 import es.um.sisdist.videofaces.backend.dao.DAOFactoryImpl;
 import es.um.sisdist.videofaces.backend.dao.IDAOFactory;
-import es.um.sisdist.videofaces.backend.dao.models.User;
-import es.um.sisdist.videofaces.backend.dao.models.Video;
 import java.lang.Thread;
 import java.io.*;
 
@@ -40,22 +33,20 @@ public class VideoFaces extends Thread
 {
 
     IDAOFactory daoFactory;
-    IUserDAO dao;
     IVideoDAO daoVideo;
 
     public String idVideo;
 
-    public static VideoFaces(){
+    public VideoFaces(){
         daoFactory = new DAOFactoryImpl();
-        dao = daoFactory.createSQLUserDAO();
         daoVideo = daoFactory.createSQLVideoDAO();
     }
 
-    public static void setId(String idVideo){
+    public void setId(String idVideo){
         this.idVideo = idVideo;
     }
 
-    public static void run() throws IOException
+    public void run()
     {
 
         // VideoCapture vc = new VideoCapture( 320, 240 );

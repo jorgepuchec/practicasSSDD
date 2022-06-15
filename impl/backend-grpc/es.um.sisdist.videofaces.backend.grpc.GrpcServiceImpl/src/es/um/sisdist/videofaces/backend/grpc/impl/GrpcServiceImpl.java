@@ -34,7 +34,7 @@ class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase
 		return new StreamObserver<VideoSpec>() {
 			@Override
 			public void onCompleted(){
-				responseObserver.onCompleted();
+				//responseObserver.onCompleted();
 			}
 			@Override
 			public void onError(Throwable arg0){	

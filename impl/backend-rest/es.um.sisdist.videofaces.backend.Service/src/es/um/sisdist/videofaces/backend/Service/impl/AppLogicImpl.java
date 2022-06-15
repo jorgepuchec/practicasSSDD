@@ -85,6 +85,11 @@ public class AppLogicImpl
         return available.getAvailable();
     }
 
+    public VideoSpec processVideo(String videoId)
+    {
+        return blockingStub.processVideo(VideoSpec.newBuilder().setId(videoId).build());
+    }
+
     // El frontend, a través del formulario de login,
     // envía el usuario y pass, que se convierte a un DTO. De ahí
     // obtenemos la consulta a la base de datos, que nos retornará,

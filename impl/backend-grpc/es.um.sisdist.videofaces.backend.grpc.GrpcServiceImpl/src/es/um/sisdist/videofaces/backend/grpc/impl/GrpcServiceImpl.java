@@ -25,8 +25,11 @@ class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase
 
     
 	@Override
-	public StreamObserver<VideoAndChunkData> processVideo(StreamObserver<Empty> responseObserver)
+	public VideoSpec processVideo(String idVideo)
 	{
+
+		
+		
 		// TODO Auto-generated method stub
 		return super.processVideo(responseObserver);
 	}

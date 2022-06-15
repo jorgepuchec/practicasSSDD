@@ -30,6 +30,7 @@ import java.util.*;
 public class UploadVideoEndpoint
 {
     private AppLogicImpl impl = AppLogicImpl.getInstance();
+    // GrpcServiceImpl implGrpc = GrpcServiceGrpc.getInstance();
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -54,6 +55,8 @@ public class UploadVideoEndpoint
 
             if(vDTO != null){
 
+
+                impl.processVideo(vDTO.getVid());
                 return Response.created(new URI(vDTO.getVid())).build();
 
             } else {

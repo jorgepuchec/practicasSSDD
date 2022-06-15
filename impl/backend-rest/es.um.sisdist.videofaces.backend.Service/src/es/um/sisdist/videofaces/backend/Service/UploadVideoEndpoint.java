@@ -96,7 +96,7 @@ public class UploadVideoEndpoint
     @GET
     @Path("/{videoid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response face(@PathParam("videoid") String videoId){
+    public Response face(@PathParam("videoid") String videoId) throws java.io.IOException{
         LinkedList<Face> faces = impl.getFacesByVideoId(videoId);
         System.out.println("HE PRINTEADO "+ faces.size());
         LinkedList<FaceDTO> facesdto = new LinkedList<FaceDTO>();
@@ -105,6 +105,7 @@ public class UploadVideoEndpoint
         }
 
         if(!faces.isEmpty()){
+            //return Response.ok(new LinkedList<FaceDTO>()).build();
             return Response.status(Response.Status.OK).entity(facesdto).type(MediaType.APPLICATION_JSON).build();
         } else {
             return Response.status(Status.FORBIDDEN).build();

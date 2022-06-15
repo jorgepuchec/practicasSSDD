@@ -20,8 +20,10 @@ import org.openimaj.video.VideoDisplayListener;
 import org.openimaj.video.VideoPositionListener;
 import org.openimaj.video.xuggle.XuggleVideo;
 import es.um.sisdist.videofaces.backend.dao.video.IVideoDAO;
+import es.um.sisdist.videofaces.backend.dao.face.IFaceDAO;
 import es.um.sisdist.videofaces.backend.dao.DAOFactoryImpl;
 import es.um.sisdist.videofaces.backend.dao.IDAOFactory;
+import es.um.sisdist.videofaces.backend.dao.models.Face;
 import java.lang.Thread;
 import java.io.*;
 
@@ -34,12 +36,14 @@ public class VideoFaces extends Thread
 
     IDAOFactory daoFactory;
     IVideoDAO daoVideo;
+    IFaceDAO daoFace;
 
     public String idVideo;
 
     public VideoFaces(){
         daoFactory = new DAOFactoryImpl();
         daoVideo = daoFactory.createSQLVideoDAO();
+        daoFace = daoFactory.createSQLFaceDAO();
     }
 
     public void setId(String idVideo){
@@ -72,12 +76,14 @@ public class VideoFaces extends Thread
                     frame.drawShape(face.getBounds(), RGBColour.RED);
                     try
                     {
+                        File file = new File(String.format("/tmp/img%05d.jpg", imgn++));
                         // También permite enviar la imagen a un OutputStream
-                        ImageUtilities.write(frame.extractROI(face.getBounds()),
-                                new File(String.format("/tmp/img%05d.jpg", imgn++)));
+                        ImageUtilities.write(frame.extractROI(face.getBounds()), file);
+
+                        InputStream inputStream = new FileInputStream(file);
+                        daoFace.saveFace(new Face(idVideo, inputStream));
                     } catch (IOException e)
                     {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     System.out.println("!");

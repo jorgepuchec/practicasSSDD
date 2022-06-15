@@ -1,4 +1,3 @@
-
 package es.um.sisdist.videofaces.backend.dao.face;
 
 import java.sql.Connection;
@@ -25,7 +24,7 @@ public class SQLFaceDAO implements IFaceDAO
         {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 
-            // Si el nombre del host se pasa por environment, se usa aquí.
+            // Si el nombre del host se pasa por environment, se usa aquÃ­.
             // Si no, se usa localhost. Esto permite configurarlo de forma
             // sencilla para cuando se ejecute en el contenedor, y a la vez
             // se pueden hacer pruebas locales
@@ -105,7 +104,7 @@ public class SQLFaceDAO implements IFaceDAO
         try
         {
             f.setFid(idF);
-            stm = conn.prepareStatement("INSERT INTO videos VALUES(?, ?, ?, ?, ?, ?);");
+            stm = conn.prepareStatement("INSERT INTO faces VALUES(?, ?, ?);");
             stm.setString(1, f.getFid());
             stm.setString(2, f.getVideoid());
             stm.setBlob(3, f.getData());

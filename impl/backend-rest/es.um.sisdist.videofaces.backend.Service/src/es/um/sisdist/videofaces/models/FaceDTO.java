@@ -3,13 +3,14 @@ package es.um.sisdist.videofaces.models;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import es.um.sisdist.videofaces.backend.dao.models.Face;
 import java.io.InputStream;
+import org.apache.commons.codec.binary.Base64;
 
 @XmlRootElement
 public class FaceDTO
 {
     private String fid;
     private String videoid;
-    private InputStream fileInputStream;
+    private String fileInputStream;
 
     /**
      * @return the id
@@ -46,7 +47,7 @@ public class FaceDTO
     /**
      * @return the fileInputStream
      */
-    public InputStream getData()
+    public String getData()
     {
         return fileInputStream;
     }
@@ -54,7 +55,7 @@ public class FaceDTO
     /**
      * @param fileInputStream the fileInputStream to set
      */
-    public void setData(InputStream fileInputStream)
+    public void setData(String fileInputStream)
     {
         this.fileInputStream = fileInputStream;
     }
@@ -62,7 +63,7 @@ public class FaceDTO
 
 
 
-    public FaceDTO(String id, String videoid, InputStream fileInputStream)
+    public FaceDTO(String id, String videoid, String fileInputStream)
     {
         this.fid = id;
         this.videoid = videoid;
@@ -70,7 +71,7 @@ public class FaceDTO
     }
 
 
-    public FaceDTO(String videoid, InputStream fileInputStream)
+    public FaceDTO(String videoid, String fileInputStream)
     {
         this.fid = "";
         this.videoid = videoid;

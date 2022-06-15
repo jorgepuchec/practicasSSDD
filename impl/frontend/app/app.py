@@ -5,7 +5,7 @@ import json
 import os
 
 # Usuarios
-from models import users, User, Video
+from models import users, User, Video, Face
 
 # Login
 from forms import LoginForm, SignupForm, SendVideoForm
@@ -117,16 +117,16 @@ def video_gallery():
 def faces_gallery():
     videoid = request.args.get('videoid')
     ufaces = []
-    error = None
+    #error = None
     id_user = current_user.id
     response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video/{videoid}")
-    error = response.json()
+    #error = response.json()
     if response.status_code == 200:
         faces = response.json()
         #error = response.json()
         for face in faces:
-            ufaces.append(Face(face[u'fid'],face[u'fileInputStream']))
-    return render_template('facesfallery.html',ufaces=ufaces, error=error)
+            ufaces.append(Face(face[u'fid'],face[u'data']))
+    return render_template('facesgallery.html',ufaces=ufaces)
 
 
 @app.route('/profile')

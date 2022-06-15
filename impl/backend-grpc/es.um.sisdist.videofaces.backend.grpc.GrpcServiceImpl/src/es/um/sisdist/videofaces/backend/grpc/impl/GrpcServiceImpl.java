@@ -12,6 +12,7 @@ import es.um.sisdist.videofaces.backend.grpc.VideoAvailability;
 import es.um.sisdist.videofaces.backend.grpc.VideoAvailabilityOrBuilder;
 import es.um.sisdist.videofaces.backend.grpc.VideoSpec;
 import io.grpc.stub.StreamObserver;
+import es.um.sisdist.videofaces.backend.facedetect.VideoFaces;
 
 class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase 
 {
@@ -25,13 +26,25 @@ class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase
 
     
 	@Override
-	public VideoSpec processVideo(String idVideo)
+	public StreamObserver<VideoSpec> processVideo(StreamObserver<Empty> responseObserver)
 	{
+		responseObserver.onNext(Empty.newBuilder().build());
 
-		
-		
-		// TODO Auto-generated method stub
-		return super.processVideo(responseObserver);
+		return new StreamObserver<VideoSpec>() {
+			@Override
+			public void onCompleted(){
+				responseObserver.onCompleted();
+			}
+			@Override
+			public void onError(Throwable arg0){	
+			}
+			@Override
+			public void onNext(VideoSpec video){
+				logger.info("Add video "+ video.getId());
+				new VideoFaces(video.getId()).start();
+			}
+		};
+
 	}
 
 	@Override

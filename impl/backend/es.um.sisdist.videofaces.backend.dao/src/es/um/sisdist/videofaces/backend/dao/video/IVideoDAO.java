@@ -18,4 +18,6 @@ public interface IVideoDAO
     public Optional<Video> saveVideo(Video v);
 
     public LinkedList<Video> getVideosById(String userId);
+
+    //public Optional<Video> getVideoById(String id);
 }

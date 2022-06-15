@@ -49,7 +49,7 @@ import com.google.protobuf.Empty;
  */
 public class GrpcServiceClient 
 {
-	
+	/*
   private static final Logger logger = Logger.getLogger(GrpcServiceClient.class.getName());
 
   private final ManagedChannel channel;
@@ -76,11 +76,11 @@ public class GrpcServiceClient
   public void sendImagesAndGetCollage()
   {
 	  // Imágenes para enviar
-	  /*ImageData image1 = ImageData.newBuilder().setId("imagen1")
+	  ImageData image1 = ImageData.newBuilder().setId("imagen1")
 			  .setData(ByteString.copyFrom("Imagen 1 data".getBytes())).build();	  
 	  ImageData image2 = ImageData.newBuilder().setId("imagen2")
 			  .setData(ByteString.copyFrom("Imagen 2 data".getBytes())).build();
-	  */
+	  
 
 
 
@@ -147,5 +147,5 @@ public class GrpcServiceClient
       client.shutdown();
     }
   }
-  
+  */
 }

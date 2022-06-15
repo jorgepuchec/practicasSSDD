@@ -85,9 +85,39 @@ public class AppLogicImpl
         return available.getAvailable();
     }
 
-    public VideoSpec processVideo(String videoId)
+    public void processVideo(String videoId)
     {
-        return blockingStub.processVideo(VideoSpec.newBuilder().setId(videoId).build());
+
+        try{
+            final CountDownLatch finishLatch = new CountDownLatch(1);
+            StreamObserver<Empty> soEmpty = new StreamObserver<Empty>;
+                @Override
+                public void onNext(Empty value){}
+                @Override
+                public void onError(Throwable t) {
+                    finishLatch.countDown();
+                }
+                @Override
+                public void onCompleted(){
+                    finishLatch.countDown();
+                }
+
+            StreamObserver<VideoSpec> so = asyncStub.processVideo(soEmpty);
+            so.onNext(VideoSpec.newBuilder().setId(videoId).build());  
+            so.onCompleted();
+
+            //esperar respuesta
+            if(finishLatch.await(1, TimeUnit.SECONDS)){
+                logger.info("Received response.");
+            } esle {
+                logger.info("Not received response.");
+            }
+
+        } catch (StatusRuntimeException e){
+
+        }
+
+        
     }
 
     // El frontend, a través del formulario de login,

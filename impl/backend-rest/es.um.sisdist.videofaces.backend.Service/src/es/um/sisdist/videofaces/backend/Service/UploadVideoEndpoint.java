@@ -54,8 +54,6 @@ public class UploadVideoEndpoint
             VideoDTO vDTO = VideoDTOUtils.toDTO(impl.saveVideo(v).orElse(null));
 
             if(vDTO != null){
-
-
                 impl.processVideo(vDTO.getVid());
                 return Response.created(new URI(vDTO.getVid())).build();
 

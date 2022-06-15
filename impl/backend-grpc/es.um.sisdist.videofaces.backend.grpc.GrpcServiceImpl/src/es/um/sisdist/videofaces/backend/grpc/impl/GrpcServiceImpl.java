@@ -26,7 +26,7 @@ class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase
 	}
 
     
-	//@Override
+	@Override
 	public StreamObserver<VideoSpec> processVideo(StreamObserver<Empty> responseObserver)
 	{
 		responseObserver.onNext(Empty.newBuilder().build());

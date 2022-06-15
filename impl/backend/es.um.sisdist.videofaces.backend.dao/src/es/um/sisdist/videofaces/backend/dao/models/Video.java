@@ -27,7 +27,6 @@ public class Video
 
     public Video(String id, String userid, String date, String filename, PROCESS_STATUS pstatus, InputStream inputStream)
     {
-        super();
         this.vid = id;
         this.userid = userid;
         this.pstatus = pstatus;
@@ -37,7 +36,6 @@ public class Video
     }
     public Video(String userid, String date, PROCESS_STATUS pstatus, String filename, InputStream inputStream)
     {
-        super();
         this.vid = "";
         this.userid = userid;
         this.pstatus = pstatus;
@@ -48,7 +46,6 @@ public class Video
 
     public Video(String id, String userid, String date, PROCESS_STATUS pstatus, String filename)
     {
-        super();
         this.vid = id;
         this.userid = userid;
         this.pstatus = pstatus;

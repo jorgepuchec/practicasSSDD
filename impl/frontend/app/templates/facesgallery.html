@@ -11,33 +11,21 @@ table, th, td {
 }
 </style>
 <body>
-
-
 <table style="width:100%">
-
     <tr>
         <th>Face ID</th>
         <th>Image</th>
     </tr>
-
     {% for face in ufaces %}
-
-        <tr>
-            
+        <tr>  
         <td>{{face.id}}</td>
         <td><img src="data:image/jpeg;base64,{{face.data}}" alt="image"></td>
-
         </tr>
-
     {% endfor %}
-
 </table>
-
 {% if error %}
      <p class="error"><strong>Error:</strong> {{ error }}
 {% endif %}
-
 </body>
-
 {% endblock %}
 

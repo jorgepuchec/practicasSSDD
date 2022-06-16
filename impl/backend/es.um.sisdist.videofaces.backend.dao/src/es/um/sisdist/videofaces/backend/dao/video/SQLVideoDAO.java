@@ -188,4 +188,23 @@ public class SQLVideoDAO implements IVideoDAO
         return null;
     }
 
+    @Override
+    public Optional<Video> setStatusVideo(String id, int status){
+        PreparedStatement stm;
+        try
+        {
+            stm = conn.prepareStatement("UPDATE videos SET process_status=? WHERE id = ?");
+            stm.setInt(1, status);
+            stm.setString(2, id);
+            stm.executeUpdate();
+            
+
+            return getVideoById(id);
+        } catch (SQLException e)
+        {
+            // Fallthrough
+        }
+        return Optional.empty();
+    }
+
 }

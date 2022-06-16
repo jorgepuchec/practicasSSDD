@@ -108,7 +108,7 @@ def video_gallery():
         videos = response.json()
         #error = response.json()
         for video in videos:
-            uvideos.append(Video(video[u'vid'],video[u'userid'], video[u'date'], video[u'filename']))
+            uvideos.append(Video(video[u'vid'],video[u'userid'], video[u'date'], video[u'filename'], video[u'pstatus']))
         error = len(uvideos)
     return render_template('videogallery.html',uvideos=uvideos, error=error)
 

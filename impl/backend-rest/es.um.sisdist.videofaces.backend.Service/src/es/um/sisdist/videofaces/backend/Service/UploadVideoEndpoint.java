@@ -84,9 +84,9 @@ public class UploadVideoEndpoint
 
         if(!vs.isEmpty()){
 
-            //return new LinkedList<VideoDTO>();
+
             return Response.status(Response.Status.OK).entity(vddto).type(MediaType.APPLICATION_JSON).build();
-            //return Response.ok(vddto).build();
+
         } else {
             return Response.status(Status.FORBIDDEN).build();
         }

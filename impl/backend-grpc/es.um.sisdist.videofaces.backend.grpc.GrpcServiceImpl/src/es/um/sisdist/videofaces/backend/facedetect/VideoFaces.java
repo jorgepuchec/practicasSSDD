@@ -106,7 +106,7 @@ public class VideoFaces extends Thread
             public void videoAtEnd(VideoDisplay<? extends Image<?, ?>> vd)
             {
 
-                //cambiar estado video a PROCESSED
+                daoVideo.setStatusVideo(idVideo, 1);
                 System.out.println("End of video");
             }
         });

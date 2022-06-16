@@ -160,7 +160,6 @@ public class AppLogicImpl
 
         Optional<User> u = dao.getUserByEmail(udto.getEmail());
         if (u.isPresent()){
-            System.out.println("1. "+u.toString());
             return Optional.empty();
 
         } else {

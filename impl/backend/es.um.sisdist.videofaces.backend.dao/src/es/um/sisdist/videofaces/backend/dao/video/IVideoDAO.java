@@ -19,5 +19,7 @@ public interface IVideoDAO
 
     public LinkedList<Video> getVideosById(String userId);
 
+    public Optional<Video> setStatusVideo(String id, int status);
+
     //public Optional<Video> getVideoById(String id);
 }

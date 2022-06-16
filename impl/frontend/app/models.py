@@ -31,11 +31,12 @@ class User(UserMixin):
 
 class Video():
 
-    def __init__(self, id, userId, date, name):
+    def __init__(self, id, userId, date, name, estado):
         self.id = id 
         self.userId = userId
         self.date = date
         self.name = name
+        self.estado = estado
 
 class Face():
     def __init__(self, id, data):

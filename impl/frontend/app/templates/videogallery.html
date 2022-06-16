@@ -21,6 +21,7 @@ table, th, td {
         <th>File ID</th>
         <th>Filename</th>
         <th>Date</th>
+        <th>Status</th>
     </tr>
 
     {% for video in uvideos %}
@@ -30,7 +31,11 @@ table, th, td {
         <td>{{video.id}}</td>
         <td><a class="nav-link" href="{{url_for("faces_gallery", videoid=video.id) }}">{{video.name}}</a></td>
         <td>{{video.date}}</td>
-
+        {% if video.estado == 0 %}
+            <td>Processing</td>
+        {% else %}
+            <td>Processed</td>
+        {% endif %}
         </tr>
 
     {% endfor %}

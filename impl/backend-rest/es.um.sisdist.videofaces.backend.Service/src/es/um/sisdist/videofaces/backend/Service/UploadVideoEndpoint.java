@@ -96,8 +96,15 @@ public class UploadVideoEndpoint
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response video(@PathParam("userId") String userId){
+    public Response video(@PathParam("userId") String userId, @Context HttpHeaders headers){
         
+        String url = "http://localhost:8080/rest/users/"+userId+"/video";
+        LocalDate lt = LocalDate.now();
+        String userTokenrcv = headers.getHeaderString("User-Token");
+        String authTokenFront = UserUtils.md5pass(url+lt.toString()+userTokenrcv);
+
+
+
         LinkedList<Video> vs = impl.getVideosById(userId);
         System.out.println("HE PRINTEADO "+ vs.get(0).getFilename());
         LinkedList<VideoDTO> vddto = new LinkedList<VideoDTO>();
@@ -105,21 +112,34 @@ public class UploadVideoEndpoint
             vddto.add(VideoDTOUtils.toDTO(v));
         }
 
+        String userToken = UserDTOUtils.toDTO(impl.getUserById(userId).orElse(null)).getToken();
+
         if(!vs.isEmpty()){
 
 
             return Response.status(Response.Status.OK).entity(vddto).type(MediaType.APPLICATION_JSON).build();
 
-        } else {
-            return Response.status(Status.FORBIDDEN).build();
+        } else if(!impl.checkToken(authTokenFront, url, userToken)){
+            return Response.status(Status.UNAUTHORIZED).build();
         }
+            else {
+                return Response.status(Status.FORBIDDEN).build();
+            }
 
     }
 
     @GET
     @Path("/{videoid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response face(@PathParam("videoid") String videoId) throws java.io.IOException{
+    public Response face(@PathParam("userId") String userId ,@PathParam("videoid") String videoId, @Context HttpHeaders headers) throws java.io.IOException{
+
+        String url = "http://localhost:8080/rest/users/"+userId+"/video/"+videoId;
+        LocalDate lt = LocalDate.now();
+        String userTokenrcv = headers.getHeaderString("User-Token");
+        String authTokenFront = UserUtils.md5pass(url+lt.toString()+userTokenrcv);
+
+        String userToken = UserDTOUtils.toDTO(impl.getUserById(userId).orElse(null)).getToken();
+
         LinkedList<Face> faces = impl.getFacesByVideoId(videoId);
         System.out.println("HE PRINTEADO "+ faces.size());
         LinkedList<FaceDTO> facesdto = new LinkedList<FaceDTO>();
@@ -130,9 +150,12 @@ public class UploadVideoEndpoint
         if(!faces.isEmpty()){
             //return Response.ok(new LinkedList<FaceDTO>()).build();
             return Response.status(Response.Status.OK).entity(facesdto).type(MediaType.APPLICATION_JSON).build();
-        } else {
-            return Response.status(Status.FORBIDDEN).build();
+        } else if(!impl.checkToken(authTokenFront, url, userToken)){
+            return Response.status(Status.UNAUTHORIZED).build();
         }
+            else {
+                return Response.status(Status.FORBIDDEN).build();
+            }
 
     }
 }

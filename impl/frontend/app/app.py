@@ -108,8 +108,10 @@ def send_video():
 def video_gallery():
     error = None
     uvideos = []
+    userToken = current_user.token
     id_user = current_user.id
-    response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video")
+    headers = {'User-Token':userToken}
+    response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video", headers=headers)
     #error = response.json()
     if response.status_code == 200:
         videos = response.json()
@@ -126,7 +128,9 @@ def faces_gallery():
     ufaces = []
     #error = None
     id_user = current_user.id
-    response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video/{videoid}")
+    userToken = current_user.token
+    headers = {'User-Token':userToken}
+    response = requests.get(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video/{videoid}", headers=headers)
     #error = response.json()
     if response.status_code == 200:
         faces = response.json()

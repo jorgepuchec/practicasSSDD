@@ -29,7 +29,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
-
+import java.time.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import java.util.*;
@@ -199,6 +199,16 @@ public class AppLogicImpl
         return daoFace.getFacesByVideoId(videoId);
     }
 
+    public boolean checkToken(String authtoken, String url, String userToken){
+        LocalDate lt = LocalDate.now();
+        String sinCode = url+lt.toString()+userToken;
+        String cod = UserUtils.md5pass(sinCode);
+        if(authtoken.equals(cod)){
+            return true;
+        } else{
+            return false;
+        }
+    }
 
 
 }

@@ -26,6 +26,11 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Context;
+//import org.apache.http.HttpHeaders;
+//import org.springframework.http.HttpHeaders;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response.Status;
 import java.util.*;
 import es.um.sisdist.videofaces.backend.dao.models.Face;
@@ -41,31 +46,44 @@ public class UploadVideoEndpoint
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadVideo(@FormDataParam("file") InputStream fileInputStream,
             @FormDataParam("file") FormDataContentDisposition fileMetaData,
-            @PathParam("userId") String userId) throws Exception
+            @PathParam("userId") String userId, @Context HttpHeaders headers) throws Exception
     {
+
+        String url = "http://localhost:8080/rest/users/"+userId+"/video";
+        String authTokenrcv = headers.getHeaderString("Auth-Token");
+
+
+
         UserDTO user = UserDTOUtils.toDTO(impl.getUserById(userId).orElse(null));
+
+        String userToken = user.getToken();
+
         if (user == null){
 
             return Response.status(Status.FORBIDDEN).build();
 
-        }else{
+        }else if(!impl.checkToken(authTokenrcv, url, userToken)){
 
-            LocalDate date = LocalDate.now();
-            String fecha = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return Response.status(Status.UNAUTHORIZED).build();
 
-            Video v = new Video(userId, fecha, Video.PROCESS_STATUS.PROCESSING, fileMetaData.getFileName(), fileInputStream);
+        } else{
 
-            VideoDTO vDTO = VideoDTOUtils.toDTO(impl.saveVideo(v).orElse(null));
+                LocalDate date = LocalDate.now();
+                String fecha = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            if(vDTO != null){
-                impl.processVideo(vDTO.getVid());
-                return Response.created(new URI(vDTO.getVid())).build();
+                Video v = new Video(userId, fecha, Video.PROCESS_STATUS.PROCESSING, fileMetaData.getFileName(), fileInputStream);
 
-            } else {
+                VideoDTO vDTO = VideoDTOUtils.toDTO(impl.saveVideo(v).orElse(null));
 
-                return Response.status(Status.FORBIDDEN).build();
-                
-            }
+                if(vDTO != null){
+                    impl.processVideo(vDTO.getVid());
+                    return Response.created(new URI(vDTO.getVid())).build();
+
+                } else {
+
+                    return Response.status(Status.FORBIDDEN).build();
+                    
+                }
 
 
         }

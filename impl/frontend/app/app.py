@@ -1,8 +1,10 @@
 from flask import Flask, render_template, send_from_directory, url_for, request, redirect
 from flask_login import LoginManager, login_manager, current_user, login_user, login_required, logout_user
+from datetime import datetime
 import requests
 import json
 import os
+import hashlib
 
 # Usuarios
 from models import users, User, Video, Face
@@ -18,6 +20,8 @@ login_manager = LoginManager()
 login_manager.init_app(app) # Para mantener la sesión
 global uvideos
 global ufaces
+
+
 
 
 # Configurar el secret_key. OJO, no debe ir en un servidor git público.
@@ -88,7 +92,8 @@ def send_video():
         #                        files=files).prepare().body.decode('utf-8'))
         REST_SERVER = os.environ.get('REST_SERVER', 'localhost')
         id_user = current_user.id
-        response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video", files=files)
+        headers = {'Auth-Token':get_authToken('http://localhost:8080/rest/users/{id_user}/video')}
+        response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video", files=files, headers=headers)
         if response.status_code == 201:
             error = 'Video uploaded!!'
         else:
@@ -155,6 +160,13 @@ def load_user(user_id):
         if user.id == user_id:
             return user
     return None
+
+def get_authToken(url):
+    my_date = datetime.now().isoformat() #ISO 8601
+    utoken = current_user.token
+    stringToConvert = url+my_date[0:10]+utoken
+    return hashlib.md5(stringToConvert.encode('utf-8')).hexdigest()
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

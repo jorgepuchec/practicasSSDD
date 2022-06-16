@@ -33,6 +33,8 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response.Status;
 import java.util.*;
 import es.um.sisdist.videofaces.backend.dao.models.Face;
+import java.time.*;
+import es.um.sisdist.videofaces.backend.dao.models.utils.UserUtils;
 
 @Path("/users/{userId}/video")
 public class UploadVideoEndpoint
@@ -48,8 +50,12 @@ public class UploadVideoEndpoint
             @PathParam("userId") String userId, @Context HttpHeaders headers) throws Exception
     {
 
+        LocalDate lt = LocalDate.now();
+
         String url = "http://localhost:8080/rest/users/"+userId+"/video";
-        String authTokenrcv = headers.getHeaderString("Auth-Token");
+        //String authTokenrcv = headers.getHeaderString("Auth-Token");
+        String userTokenrcv = headers.getHeaderString("User-Token");
+        String authTokenFront = UserUtils.md5pass(url+lt.toString()+userTokenrcv);
 
 
 
@@ -61,7 +67,7 @@ public class UploadVideoEndpoint
 
             return Response.status(Status.FORBIDDEN).build();
 
-        }else if(!impl.checkToken(authTokenrcv, url, userToken)){
+        }else if(!impl.checkToken(authTokenFront, url, userToken)){
 
             return Response.status(Status.UNAUTHORIZED).build();
 

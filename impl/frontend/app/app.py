@@ -92,7 +92,9 @@ def send_video():
         #                        files=files).prepare().body.decode('utf-8'))
         REST_SERVER = os.environ.get('REST_SERVER', 'localhost')
         id_user = current_user.id
-        headers = {'Auth-Token':get_authToken('http://localhost:8080/rest/users/{id_user}/video')}
+        userToken = current_user.token
+        #headers = {'Auth-Token':get_authToken('http://localhost:8080/rest/users/{id_user}/video')}
+        headers = {'User-Token':userToken}
         response = requests.post(f"http://{os.environ['BACKEND_REST']}:8080/rest/users/{id_user}/video", files=files, headers=headers)
         if response.status_code == 201:
             error = 'Video uploaded!!'
